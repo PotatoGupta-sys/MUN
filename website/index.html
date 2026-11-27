@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Official Model United Nations Committee Portal chaired by Kartik Nandal Sir.">
   <title>MUN Committee | Kartik Nandal Sir</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23050507' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2322c55e'/%3E%3C/svg%3E">
 
   <!--
     ==========================================================================
@@ -1424,7 +1423,7 @@
   </footer>
 
   <!-- ========================================================================
-       Hidden UNCSW // Delegate Field Guidance Terminal
+       Hidden UNCSW // Delegate Field Guidance Terminal (Hardened Edition)
        ======================================================================== -->
   <div id="arg-overlay" class="arg-overlay" role="dialog" aria-modal="true" aria-labelledby="arg-terminal-title">
     <div class="arg-terminal">
@@ -1519,11 +1518,27 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       /* ======================================================================
-         0. Portrait Loader (Bespoke SVG + Click/Key Swap)
+         0. Portrait Loader (Bespoke SVG -> Silent Local File Probe -> Click Swap)
          ====================================================================== */
       const portraitFrame = document.getElementById("portrait-frame");
       const portraitImg = document.getElementById("chair-portrait");
       const fileInput = document.getElementById("portrait-file-input");
+
+      if (portraitImg) {
+        const localCandidates = ["Kartik_2.jpg", "Kartik.jpg", "chair.jpg"];
+        let foundLocal = false;
+
+        localCandidates.forEach((candidate) => {
+          const probe = new Image();
+          probe.onload = () => {
+            if (!foundLocal && probe.naturalWidth > 0) {
+              foundLocal = true;
+              portraitImg.src = candidate;
+            }
+          };
+          probe.src = candidate;
+        });
+      }
 
       if (portraitFrame && fileInput && portraitImg) {
         portraitFrame.addEventListener("click", () => fileInput.click());
@@ -1581,9 +1596,42 @@
       }
 
       /* ======================================================================
-         3. Real-World New Delhi (IST / Asia/Kolkata) Countdown
+         3. Real-World Atomic-Synced New Delhi (IST / Asia/Kolkata) Countdown
          ====================================================================== */
       const SESSION_START_MS = new Date("2026-11-28T08:30:00+05:30").getTime();
+      let atomicClockOffsetMs = 0;
+
+      function syncAtomicClock() {
+        fetch("https://worldtimeapi.org/api/timezone/Asia/Kolkata", { cache: "no-store" })
+          .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Primary time API unavailable"))))
+          .then((data) => {
+            if (data && data.datetime) {
+              const serverMs = new Date(data.datetime).getTime();
+              if (!Number.isNaN(serverMs)) {
+                atomicClockOffsetMs = serverMs - Date.now();
+                updateDelhiTimer();
+              }
+            }
+          })
+          .catch(() => {
+            fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia/Kolkata", { cache: "no-store" })
+              .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Secondary time API unavailable"))))
+              .then((data) => {
+                if (data && data.dateTime) {
+                  const serverMs = new Date(`${data.dateTime}+05:30`).getTime();
+                  if (!Number.isNaN(serverMs)) {
+                    atomicClockOffsetMs = serverMs - Date.now();
+                    updateDelhiTimer();
+                  }
+                }
+              })
+              .catch(() => {
+                // Gracefully fall back to device clock converted strictly to Asia/Kolkata
+              });
+          });
+      }
+
+      syncAtomicClock();
 
       const delhiClockEl = document.getElementById("delhi-live-clock");
       const countdownReadout = document.getElementById("countdown-readout");
@@ -1611,7 +1659,7 @@
       const padZero = (num) => String(Math.max(0, num)).padStart(2, "0");
 
       function updateDelhiTimer() {
-        const syncedNowMs = Date.now();
+        const syncedNowMs = Date.now() + atomicClockOffsetMs;
         const nowDate = new Date(syncedNowMs);
 
         if (delhiClockEl) {
@@ -1651,11 +1699,11 @@
       window.setInterval(updateDelhiTimer, 1000);
 
       /* ======================================================================
-         4. Obfuscated Counter-Intelligence Decoy Redirector (50/50 Randomizer)
+         4. Obfuscated Counter-Intelligence Decoy Redirector
          ====================================================================== */
       const ENCODED_DECOY_PAYLOADS = [
         "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj14dkZaam81UGdHMA==",
-        "aHR0cHM6Ly93d3cueW91dHViZS5jb20vc2hvcnRzL3NsVlF2cFhqRDZ3"
+        "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1tdDVoMG12dDZUOCZsaXN0PVJEbXQ1aDBtdnQ2VDgmc3RhcnRfcmFkaW89MQ=="
       ];
 
       function dispatchDecoyRedirect() {
@@ -1711,7 +1759,7 @@
       );
 
       /* ======================================================================
-         6. Hidden UNCSW // Delegate Field Guidance Terminal
+         6. Hidden UNCSW // Delegate Field Guidance Terminal (Hardened Mode)
          ====================================================================== */
       const STORAGE_KEY = "uncsw_hardened_terminal_v2";
 
