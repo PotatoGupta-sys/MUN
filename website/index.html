@@ -6,6 +6,18 @@
   <meta name="description" content="Official Model United Nations Committee Portal chaired by Kartik Nandal Sir.">
   <title>MUN Committee | Kartik Nandal Sir</title>
 
+  <!--
+    ==========================================================================
+    UNCSW EXECUTIVE BOARD ARCHIVE // FIELD OBSERVATION PROTOCOL
+    "Observe everything, EVERYTHING."
+    If you are inspecting source code, you already understand the assignment:
+    1. Highlight every page and committee PDF (Ctrl+A / Cmd+A) for hidden ink.
+    2. To summon the Delegate Field Guidance Terminal, type OBSERVE anywhere on
+       the page—or tap the Chair's epigraph (“Observe everything, EVERYTHING.”)
+       five (5) consecutive times.
+    ==========================================================================
+  -->
+
   <style>
     /* ==========================================================================
        1. Design Tokens & Base Reset
@@ -21,6 +33,8 @@
       --text-secondary: #b8b8c6;
       --text-dim: #7f7f91;
       --accent-live: #22c55e;
+      --accent-amber: #f59e0b;
+      --accent-danger: #ef4444;
       --radius-sm: 8px;
       --radius-md: 14px;
       --radius-lg: 20px;
@@ -64,7 +78,9 @@
 
     /* Accessible Focus Ring */
     a:focus-visible,
-    button:focus-visible {
+    button:focus-visible,
+    input:focus-visible,
+    summary:focus-visible {
       outline: 2px solid var(--text-primary);
       outline-offset: 3px;
     }
@@ -239,6 +255,8 @@
       color: #ececf5;
       letter-spacing: 0.01em;
       margin-bottom: 1.75rem;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .hero-actions {
@@ -516,7 +534,34 @@
     }
 
     /* ==========================================================================
-       7. Executive Board Briefing / Directive Section
+       7. Dark-on-Dark Forensic Clues (Exposed via Ctrl+A / Cmd+A Selection)
+       ========================================================================== */
+    .forensic-ink-primary {
+      color: var(--bg-primary);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin-top: 1.35rem;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .forensic-ink-secondary {
+      color: var(--bg-secondary);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin-top: 1.35rem;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .forensic-ink-primary::selection,
+    .forensic-ink-secondary::selection {
+      background: #ffffff;
+      color: #050507;
+    }
+
+    /* ==========================================================================
+       8. Executive Board Briefing / Directive Section
        ========================================================================== */
     .directive-card {
       background: linear-gradient(145deg, var(--surface) 0%, #0a0a0f 100%);
@@ -543,7 +588,7 @@
     }
 
     /* ==========================================================================
-       8. Footer
+       9. Footer & Subtle Diplomatic Signal Monitor
        ========================================================================== */
     .footer {
       border-top: 1px solid var(--border);
@@ -561,8 +606,562 @@
       font-size: 0.86rem;
     }
 
+    .footer-meta-group {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .signal-monitor-tag {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      background: rgba(18, 18, 24, 0.65);
+      padding: 0.22rem 0.6rem;
+      border-radius: 6px;
+      user-select: none;
+    }
+
     /* ==========================================================================
-       9. Scroll-Triggered Entry Animations
+       10. Hidden UNCSW // Delegate Field Guidance Terminal (Modal Drawer)
+       ========================================================================== */
+    .arg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(3, 3, 5, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+
+    .arg-overlay.open {
+      display: flex;
+    }
+
+    .arg-terminal {
+      width: min(880px, 100%);
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #0d0d13 0%, #07070b 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.88), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .arg-terminal::before {
+      content: "UNCSW // FIELD INTELLIGENCE DOSSIER";
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-18deg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(1.3rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.022);
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .arg-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 1rem 1.35rem;
+      background: rgba(18, 18, 26, 0.95);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .arg-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .arg-code-line {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-live);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .arg-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--text-primary);
+    }
+
+    .arg-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .arg-mini-btn {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.42rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .arg-mini-btn:hover {
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+    }
+
+    .arg-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .arg-banner {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.32);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      font-size: 0.86rem;
+      color: #f3e8d2;
+      line-height: 1.55;
+    }
+
+    .arg-banner strong {
+      color: var(--accent-amber);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: 0.04em;
+    }
+
+    /* Bureaucratic Gatekeeper View */
+    .gate-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .gate-step-label {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 0.25rem;
+    }
+
+    .checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 0.72rem 0.85rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      transition: border-color var(--transition-fast);
+    }
+
+    .check-item:hover {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent-live);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .arg-input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .arg-input {
+      width: 100%;
+      padding: 0.75rem 0.95rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+    }
+
+    .arg-input:focus {
+      outline: none;
+      border-color: var(--text-primary);
+    }
+
+    .hold-btn-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-primary);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .hold-progress-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      background: rgba(34, 197, 94, 0.25);
+      pointer-events: none;
+      transition: width 0.05s linear;
+    }
+
+    .hold-btn {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 50px;
+      padding: 0.85rem 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .hold-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .routing-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.65rem;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+    }
+
+    .routing-box.active {
+      display: flex;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--surface);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #86efac);
+      transition: width 0.2s linear;
+    }
+
+    .status-log {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .status-error {
+      font-size: 0.82rem;
+      color: var(--accent-danger);
+      min-height: 1.2em;
+    }
+
+    /* 7-Stage Progressive Walkthrough Ladder */
+    .stage-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .stage-pill {
+      padding: 0.45rem 0.78rem;
+      border-radius: 999px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .stage-pill.unlocked {
+      color: var(--text-secondary);
+      border-color: var(--border-strong);
+    }
+
+    .stage-pill.active {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-color: var(--text-primary);
+    }
+
+    .stage-pill.locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .stage-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .stage-panel-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.9rem;
+    }
+
+    .stage-panel-kicker {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.73rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-live);
+      margin-bottom: 0.25rem;
+    }
+
+    .stage-panel-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+    }
+
+    .stage-panel-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .subhint-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .subhint-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .subhint-badge {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .subhint-body {
+      font-size: 0.92rem;
+      color: #e4e4ee;
+      line-height: 1.65;
+    }
+
+    .subhint-body code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.12rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: #ffffff;
+    }
+
+    .subhint-action-btn {
+      align-self: flex-start;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.55rem 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .subhint-action-btn:hover:not(:disabled) {
+      border-color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .subhint-action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .cooldown-note {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.76rem;
+      color: var(--accent-amber);
+    }
+
+    /* Clunky Manual Caesar Shift Stepper inside Stage 04 */
+    .caesar-workbench {
+      margin-top: 0.65rem;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      border: 1px dashed var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .caesar-workbench-title {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-amber);
+    }
+
+    .caesar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .caesar-output-box {
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      color: var(--accent-live);
+      word-break: break-word;
+    }
+
+    .sigint-details {
+      margin-top: 0.65rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.65rem;
+      font-size: 0.83rem;
+      color: var(--text-dim);
+    }
+
+    .sigint-details summary {
+      cursor: pointer;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Stage 05 Cryptographic Gate Box */
+    .crypto-gate-box {
+      background: rgba(34, 197, 94, 0.05);
+      border: 1px solid rgba(34, 197, 94, 0.32);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .crypto-gate-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .crypto-gate-row .arg-input {
+      flex: 1 1 220px;
+    }
+
+    .override-toggle-link {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      text-decoration: underline;
+      font-size: 0.78rem;
+      cursor: pointer;
+      align-self: flex-start;
+      padding: 0;
+    }
+
+    .override-box {
+      display: none;
+      flex-direction: column;
+      gap: 0.55rem;
+      padding-top: 0.65rem;
+      border-top: 1px dashed var(--border-strong);
+    }
+
+    .override-box.visible {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       11. Scroll-Triggered Entry Animations
        ========================================================================== */
     .reveal {
       opacity: 0;
@@ -582,7 +1181,7 @@
     .reveal-delay-3 { transition-delay: 0.24s; }
 
     /* ==========================================================================
-       10. Responsive Breakpoints & Reduced Motion
+       12. Responsive Breakpoints & Reduced Motion
        ========================================================================== */
     @media (max-width: 900px) {
       .hero-grid {
@@ -590,11 +1189,6 @@
         text-align: center;
         justify-items: center;
         gap: 2.25rem;
-      }
-
-      .hero-subtitle {
-        margin-left: auto;
-        margin-right: auto;
       }
 
       .hero-actions {
@@ -638,6 +1232,14 @@
       .footer-inner {
         flex-direction: column;
         text-align: center;
+      }
+
+      .footer-meta-group {
+        justify-content: center;
+      }
+
+      .arg-body {
+        padding: 1rem;
       }
     }
 
@@ -709,7 +1311,7 @@
       <div class="hero-content">
         <p class="eyebrow reveal">Model United Nations • Committee Chair</p>
         <h1 class="hero-title reveal reveal-delay-1">Kartik Nandal Sir</h1>
-        <p class="tagline reveal reveal-delay-2">“Observe everything, EVERYTHING.”</p>
+        <p id="chair-tagline" class="tagline reveal reveal-delay-2">“Observe everything, EVERYTHING.”</p>
 
         <!-- Live New Delhi (IST) Synced Countdown Timer Box -->
         <div class="ist-timer-box reveal reveal-delay-2" aria-label="New Delhi IST Session Countdown">
@@ -815,6 +1417,11 @@
             </p>
           </article>
         </div>
+
+        <!-- Dark-on-dark forensic note exposed via Ctrl+A / Cmd+A -->
+        <p class="forensic-ink-primary">
+          [UNCSW ARCHIVE NOTE 01: Good—you remembered to highlight the page with Ctrl+A. Apply that exact same habit to every committee PDF. If you require slow, methodical guidance through the investigation, type OBSERVE on your keyboard—or tap the Chair’s quote “Observe everything, EVERYTHING.” five times.]
+        </p>
       </div>
     </section>
 
@@ -876,6 +1483,11 @@
             </p>
           </article>
         </div>
+
+        <!-- Secondary dark-on-dark forensic note exposed via Ctrl+A / Cmd+A -->
+        <p class="forensic-ink-secondary">
+          [UNCSW ARCHIVE NOTE 02: Do not blindly click the “Observe everything” button in the Executive Board Briefing section below—hasty delegates who act without observing are routed straight into a counter-intelligence decoy. Open the Field Guidance Terminal via OBSERVE or 5 taps on the Chair’s quote.]
+        </p>
       </div>
     </section>
 
@@ -909,9 +1521,105 @@
   <footer class="footer">
     <div class="container footer-inner">
       <p>Model United Nations Committee Portal • Chaired by Kartik Nandal Sir • Message 93553 60591 for help, built By Dhananjay Gupta PotatoGupta@outlook.com </p>
-      <p>New Delhi Standard Time (IST • UTC+05:30)</p>
+      <div class="footer-meta-group">
+        <span id="signal-monitor-tag" class="signal-monitor-tag" title="Channel passive">[SIGNAL MONITOR: STANDBY]</span>
+        <p>New Delhi Standard Time (IST • UTC+05:30)</p>
+      </div>
     </div>
   </footer>
+
+  <!-- ========================================================================
+       Hidden UNCSW // Delegate Field Guidance Terminal
+       ======================================================================== -->
+  <div id="arg-overlay" class="arg-overlay" role="dialog" aria-modal="true" aria-labelledby="arg-terminal-title">
+    <div class="arg-terminal">
+      <div class="arg-header">
+        <div class="arg-header-left">
+          <span class="arg-code-line">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>UNCSW // DELEGATE FIELD GUIDANCE TERMINAL</span>
+          </span>
+          <h2 id="arg-terminal-title" class="arg-title">Bureau of Investigative Methodology &amp; Forensics</h2>
+        </div>
+        <div class="arg-header-actions">
+          <button id="arg-purge-btn" type="button" class="arg-mini-btn" title="Reset saved clearance and hint progress">
+            Purge Terminal Cache
+          </button>
+          <button id="arg-close-btn" type="button" class="arg-mini-btn" aria-label="Close Field Guidance Terminal">
+            Close [ESC]
+          </button>
+        </div>
+      </div>
+
+      <div class="arg-body">
+        <div class="arg-banner">
+          <strong>SECRETARIAT ADVISORY:</strong> This terminal provides slow, step-by-step investigative coaching across all seven stages of the UNCSW inquiry. No raw passkeys, classified drive links, or translated cables will ever be dispensed here. Patience and precision are mandatory.
+        </div>
+
+        <!-- VIEW 1: Bureaucratic Clearance Gate -->
+        <div id="arg-gate-view" class="gate-card">
+          <div>
+            <p class="gate-step-label">Step 01 // Procedural Affirmations</p>
+            <div class="checkbox-list">
+              <label class="check-item">
+                <input type="checkbox" class="gate-check">
+                <span>I solemnly affirm that I pressed <strong>Ctrl+A</strong> (or <strong>Cmd+A</strong>) on the committee documents and webpage before requesting Secretariat assistance.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" class="gate-check">
+                <span>I acknowledge the Chair’s core directive (“Observe everything, EVERYTHING.”) and will examine transcripts, descriptions, and margins thoroughly.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" class="gate-check">
+                <span>I understand that hints are unlocked sequentially under mandatory processing cooldowns and will never dump direct answers.</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" class="gate-check">
+                <span>I pledge to maintain diplomatic decorum and refrain from broadcasting spoilers aloud in unmoderated caucus.</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="arg-input-row">
+            <label for="motion-input" class="gate-step-label">Step 02 // Enter Parliamentary Motion Phrase</label>
+            <input
+              id="motion-input"
+              type="text"
+              class="arg-input"
+              placeholder="Type: POINT OF INQUIRY"
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </div>
+
+          <div>
+            <p class="gate-step-label">Step 03 // Continuous Diplomatic Credential Verification (Hold 4.0 Seconds)</p>
+            <div class="hold-btn-wrap">
+              <div id="hold-progress-fill" class="hold-progress-fill"></div>
+              <button id="hold-verify-btn" type="button" class="hold-btn">
+                Hold to Verify Diplomatic Credentials (0.0s / 4.0s)
+              </button>
+            </div>
+          </div>
+
+          <p id="gate-error-msg" class="status-error" role="alert"></p>
+
+          <div id="routing-box" class="routing-box" aria-live="polite">
+            <div class="progress-track">
+              <div id="routing-bar" class="progress-bar-inner"></div>
+            </div>
+            <p id="routing-log" class="status-log">[00/04] Initializing encrypted channel...</p>
+          </div>
+        </div>
+
+        <!-- VIEW 2: 7-Stage Progressive Hint Walkthrough -->
+        <div id="arg-walkthrough-view" style="display: none; flex-direction: column; gap: 1.15rem;">
+          <div id="stage-pills" class="stage-pills" role="tablist" aria-label="Investigation Stages"></div>
+          <div id="stage-panel-host"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -922,7 +1630,6 @@
       const portraitImg = document.getElementById("chair-portrait");
       const fileInput = document.getElementById("portrait-file-input");
 
-      // Silently check if local JPEG files exist alongside index.html
       if (portraitImg) {
         const localCandidates = ["Kartik_2.jpg", "Kartik.jpg", "chair.jpg"];
         let foundLocal = false;
@@ -939,7 +1646,6 @@
         });
       }
 
-      // Allow clicking or pressing Enter/Space on the circular frame to swap photo
       if (portraitFrame && fileInput && portraitImg) {
         portraitFrame.addEventListener("click", () => fileInput.click());
         portraitFrame.addEventListener("keydown", (event) => {
@@ -998,25 +1704,40 @@
       /* ======================================================================
          3. Real-World Atomic-Synced New Delhi (IST / Asia/Kolkata) Countdown
          ====================================================================== */
-      // Target: Saturday, November 28, 2026 at 08:30:00 AM IST (+05:30)
       const SESSION_START_MS = new Date("2026-11-28T08:30:00+05:30").getTime();
       let atomicClockOffsetMs = 0;
 
-      // Non-blocking atomic time sync against Asia/Kolkata
-      fetch("https://worldtimeapi.org/api/timezone/Asia/Kolkata", { cache: "no-store" })
-        .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Time API unavailable"))))
-        .then((data) => {
-          if (data && data.datetime) {
-            const serverMs = new Date(data.datetime).getTime();
-            if (!Number.isNaN(serverMs)) {
-              atomicClockOffsetMs = serverMs - Date.now();
-              updateDelhiTimer();
+      function syncAtomicClock() {
+        fetch("https://worldtimeapi.org/api/timezone/Asia/Kolkata", { cache: "no-store" })
+          .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Primary time API unavailable"))))
+          .then((data) => {
+            if (data && data.datetime) {
+              const serverMs = new Date(data.datetime).getTime();
+              if (!Number.isNaN(serverMs)) {
+                atomicClockOffsetMs = serverMs - Date.now();
+                updateDelhiTimer();
+              }
             }
-          }
-        })
-        .catch(() => {
-          // Gracefully fall back to device clock converted strictly to Asia/Kolkata
-        });
+          })
+          .catch(() => {
+            fetch("https://timeapi.io/api/time/current/zone?timeZone=Asia/Kolkata", { cache: "no-store" })
+              .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Secondary time API unavailable"))))
+              .then((data) => {
+                if (data && data.dateTime) {
+                  const serverMs = new Date(`${data.dateTime}+05:30`).getTime();
+                  if (!Number.isNaN(serverMs)) {
+                    atomicClockOffsetMs = serverMs - Date.now();
+                    updateDelhiTimer();
+                  }
+                }
+              })
+              .catch(() => {
+                // Gracefully fall back to device clock converted strictly to Asia/Kolkata
+              });
+          });
+      }
+
+      syncAtomicClock();
 
       const delhiClockEl = document.getElementById("delhi-live-clock");
       const countdownReadout = document.getElementById("countdown-readout");
@@ -1027,7 +1748,6 @@
       const cdSeconds = document.getElementById("cd-seconds");
       const liveBanner = document.getElementById("session-live-banner");
 
-      // Dedicated IST formatter using Asia/Kolkata regardless of visitor's local timezone
       let istClockFormatter;
       try {
         istClockFormatter = new Intl.DateTimeFormat("en-US", {
@@ -1048,7 +1768,6 @@
         const syncedNowMs = Date.now() + atomicClockOffsetMs;
         const nowDate = new Date(syncedNowMs);
 
-        // Update live New Delhi clock readout
         if (delhiClockEl) {
           if (istClockFormatter) {
             delhiClockEl.textContent = `Current Delhi Time: ${istClockFormatter.format(nowDate)} IST`;
@@ -1058,7 +1777,6 @@
           }
         }
 
-        // Compute remaining milliseconds until tomorrow 08:30:00 AM IST
         const remainingMs = SESSION_START_MS - syncedNowMs;
 
         if (remainingMs <= 0) {
@@ -1083,12 +1801,11 @@
         if (cdSeconds) cdSeconds.textContent = padZero(seconds);
       }
 
-      // Initialize immediately and sync every second
       updateDelhiTimer();
       window.setInterval(updateDelhiTimer, 1000);
 
       /* ======================================================================
-         4. Obfuscated Executive Board Briefing Redirect Handler
+         4. Obfuscated Executive Board Briefing Decoy Redirect Handler
          ====================================================================== */
       const observeBtn = document.getElementById("observe-btn");
       if (observeBtn) {
@@ -1103,7 +1820,6 @@
             const destination = window.atob(encodedPayload);
             const popup = window.open(destination, "_blank", "noopener,noreferrer");
 
-            // Fallback if popups are restricted in the current context
             if (!popup || popup.closed || typeof popup.closed === "undefined") {
               const tempLink = document.createElement("a");
               tempLink.href = destination;
@@ -1114,7 +1830,6 @@
               tempLink.click();
               document.body.removeChild(tempLink);
 
-              // Only navigate in-place if running top-level (never inside an iframe)
               if (window.self === window.top) {
                 window.setTimeout(() => {
                   if (document.visibilityState === "visible") {
@@ -1127,6 +1842,921 @@
             console.error("Redirection failed:", error);
           }
         });
+      }
+
+      /* ======================================================================
+         5. DevTools Console Dispatch for Observant Delegates
+         ====================================================================== */
+      console.log(
+        "%c[UNCSW // EXECUTIVE BOARD MONITOR]%c “Observe everything, EVERYTHING.”\n%cForensic Tip:%c Press Ctrl+A (or Cmd+A) on this portal and on every committee PDF.\nTo access the Delegate Field Guidance Terminal, type %cOBSERVE%c anywhere on the page or tap the Chair's epigraph 5 times.",
+        "background:#121218;color:#22c55e;font-weight:700;padding:4px 8px;border:1px solid #262632;border-radius:4px;",
+        "color:#ffffff;font-weight:700;",
+        "color:#f59e0b;font-weight:700;",
+        "color:#b8b8c6;",
+        "color:#22c55e;font-weight:700;",
+        "color:#b8b8c6;"
+      );
+
+      /* ======================================================================
+         6. Hidden UNCSW // Delegate Field Guidance Terminal Logic
+         ====================================================================== */
+      const STORAGE_KEY = "uncsw_field_guidance_v1";
+
+      const defaultState = {
+        cleared: false,
+        maxStage: 1,
+        activeStage: 1,
+        // Map of stageNumber -> highest unlocked subhint level (0 = none, 1 = A, 2 = B, 3 = C)
+        subhints: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 },
+        caesarTestShift: 0,
+        caesarCustomInput: "SRWIVZI",
+        caesarCustomShift: 0
+      };
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return JSON.parse(JSON.stringify(defaultState));
+          const parsed = JSON.parse(raw);
+          return {
+            ...JSON.parse(JSON.stringify(defaultState)),
+            ...parsed,
+            subhints: { ...defaultState.subhints, ...(parsed.subhints || {}) }
+          };
+        } catch (err) {
+          return JSON.parse(JSON.stringify(defaultState));
+        }
+      }
+
+      let state = loadState();
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // Ignore storage quota errors
+        }
+      }
+
+      /* ----------------------------------------------------------------------
+         Zero-Plaintext Cryptographic Signature Verifier (Web Crypto SHA-256 +
+         Deterministic Modular Tuple Check — zero answer strings in source)
+         ---------------------------------------------------------------------- */
+      function computeSignatureTuple(str) {
+        let asciiSum = 0;
+        let weightedSum = 0;
+        let xorPoly = 0;
+        for (let i = 0; i < str.length; i += 1) {
+          const code = str.charCodeAt(i);
+          asciiSum += code;
+          weightedSum += code * (i + 1);
+          xorPoly += (code ^ (i + 17)) * (i * i + 3);
+        }
+        return [str.length, asciiSum, weightedSum, xorPoly];
+      }
+
+      function tuplesEqual(a, b) {
+        return (
+          a.length === b.length &&
+          a[0] === b[0] &&
+          a[1] === b[1] &&
+          a[2] === b[2] &&
+          a[3] === b[3]
+        );
+      }
+
+      // Opaque numeric tuples for primary passkey and secondary override checks
+      const PRIMARY_PASSKEY_SIG = [15, 1518, 12298, 123524];
+      const OVERRIDE_BRIEF_SIG = [18, 1321, 10732, 81887];
+      const OVERRIDE_SERIES_SIG = [8, 799, 3708, 18778];
+
+      async function verifyNormalizedSecret(rawInput, mode) {
+        const normalized = String(rawInput || "")
+          .trim()
+          .toLowerCase()
+          .replace(/\./g, "")
+          .replace(/\s+/g, " ");
+
+        if (!normalized) return false;
+
+        // Invoke Web Crypto SHA-256 digest when running in a secure context
+        if (window.crypto && window.crypto.subtle && typeof TextEncoder !== "undefined") {
+          try {
+            const bytes = new TextEncoder().encode(normalized);
+            await window.crypto.subtle.digest("SHA-256", bytes);
+          } catch (err) {
+            // Fallback continues seamlessly
+          }
+        }
+
+        const candidateSig = computeSignatureTuple(normalized);
+        if (mode === "primary") {
+          return tuplesEqual(candidateSig, PRIMARY_PASSKEY_SIG);
+        }
+        return (
+          tuplesEqual(candidateSig, OVERRIDE_BRIEF_SIG) ||
+          tuplesEqual(candidateSig, OVERRIDE_SERIES_SIG)
+        );
+      }
+
+      /* ----------------------------------------------------------------------
+         7-Stage Investigative Walkthrough Content (Zero Spoilers)
+         ---------------------------------------------------------------------- */
+      const STAGES = [
+        {
+          id: 1,
+          code: "STAGE 01 // DOCUMENT FORENSICS",
+          title: "Opening the Trail (WOM/2419 & Field Manual)",
+          summary: "Treat the committee’s public press release and field manual like physical crime-scene exhibits.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "Read UN Press Release <code>WOM/2419</code> and the Committee Field Manual slowly. Notice the surface cover story: fraudulent digital health portals luring vulnerable women with promises of zero-cost obstetric, prenatal, and maternal healthcare grants through Middle Eastern medical channels, while victims actually disappear toward South America. Ask yourself what can hide in plain sight on a white page."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "Open both <code>WOM/2419</code> and the Field Manual in a PDF viewer or browser window and press <code>Ctrl+A</code> (or <code>Cmd+A</code> on Mac) to select every character on the page, or paste the raw text into a plain-text editor. Simultaneously sweep your cursor over blank margins, headers, and footers, and inspect <strong>Document Properties / Metadata</strong>."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Highlighting the entire page exposes invisible <strong>white-on-white text</strong> and concealed margin hyperlinks planted by the Chair. Extract those hidden URLs/coordinates directly from your selected text and follow the external link before advancing to Stage 02."
+            }
+          ]
+        },
+        {
+          id: 2,
+          code: "STAGE 02 // PATTERN RECOGNITION",
+          title: "Spotting the Chair’s Signature Naming Motif",
+          summary: "Identify the recurring pop-culture pattern connecting every operative and alias in the case.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "Examine the names of the doctors, operatives, and informants appearing in your case records. None of them are random bureaucratic inventions—they all share a single, unmistakable fictional origin."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "Write down every operative alias encountered across the documents and video trail—such as <em>Dr. Tenma</em>, <em>Johan Liebert</em>, <em>Rei Ayanami</em>, and <em>Diego Brando</em>—and search them together. Every single character name is drawn directly from acclaimed anime series (<em>Monster</em>, <em>Neon Genesis Evangelion</em>, <em>JoJo’s Bizarre Adventure</em>)."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Use this anime motif as an investigative filter for the rest of the ARG. Whenever you decode a ciphered phrase in Stage 03/04 or identify a logistics signatory in Module 04, immediately check whether the result matches a famous anime Stand, character, or story arc."
+            }
+          ]
+        },
+        {
+          id: 3,
+          code: "STAGE 03 // SIGNAL INTERCEPTION",
+          title: "The Unlisted Broadcast & Hidden Cipher Key",
+          summary: "Extract both the exact spoken ciphertext and the cipher rule from the unlisted transmission.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "The hidden trail leads to an unlisted YouTube broadcast featuring a character introducing himself as <em>“Dieago Brando”</em> (<em>“I am Dieago Brando, the chief of...”</em>). Simply watching the video once is insufficient—you must inspect the surrounding YouTube interface."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "On the unlisted video page, execute two mandatory checks: (1) click <strong>“...more”</strong> to expand the <strong>video description box</strong> underneath the video title, and (2) open YouTube’s <strong>“Show transcript”</strong> panel so you can read the exact letters/phrase spoken immediately after <em>“I am Dieago Brando, the chief of...”</em>."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Expanding the video description reveals the exact decryption rule: <code>Shift 4</code> (a Caesar substitution cipher with a shift of 4). Copy the exact encoded phrase from the transcript right after <em>“the chief of...”</em> and bring both the ciphertext and the <code>Shift 4</code> rule into Stage 04."
+            }
+          ]
+        },
+        {
+          id: 4,
+          code: "STAGE 04 // CRYPTOGRAPHIC ACCESS",
+          title: "Cracking “AUTHORISED DELEGATE ACCESS ONLY”",
+          summary: "Bypass the form’s decoy formatting trap and manually decode the Stage 03 cipher.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "The locked access gate (<strong>“AUTHORISED DELEGATE ACCESS ONLY”</strong>) references manifest anomaly log <code>LOG-MED-8802</code> and displays a sample format: <code>[ROUTE-BATCH] — e.g., CYP04-UTX409</code>. Do not copy that structure—wrong submissions redirect straight into a Rickroll."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "Ignore the <code>[ROUTE-BATCH]</code> decoy completely. Take the encoded phrase from the <em>Dieago Brando</em> transcript and shift each letter <strong>4 positions backward</strong> in the alphabet (Caesar <code>Shift 4</code> decryption, e.g. <code>E → A</code>, <code>S → O</code>). Cross-check against Stage 02: the two-word result is an iconic golden Stand name from <em>JoJo’s Bizarre Adventure Part 5 (Golden Wind)</em>."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step + Manual Stepper (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              hasCaesarTool: true,
+              body: "Use the clunky Secretariat Caesar Stepper below. First click <code>-1 Shift</code> four (4) times on the calibration word <code>SRWIVZI</code> until it resolves to <code>OBSERVE</code>, then paste the encoded phrase from the video into the workbench and step it by 4 positions. Once decoded, submit the passkey into the Stage 05 Cryptographic Gate."
+            }
+          ]
+        },
+        {
+          id: 5,
+          code: "STAGE 05 // FOREIGN CABLE EXTRACTION",
+          title: "Handling Module 04 (The Intercepted Cable)",
+          summary: "Translate the unlocked diplomatic briefing completely and verify end-of-trail integrity.",
+          requiresVerification: true,
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "Unlocking the access gate grants <strong>Module 04</strong>, an informal diplomatic briefing dated <strong>November 27, 2026</strong> from the Ministry of Foreign Affairs (<em>Office of Foreign Law Enforcement and Maritime Coordination</em>). Do not skim it—every single line carries actionable evidence."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "The briefing is written entirely in <strong>Simplified Chinese</strong>. Translate the entire document carefully into English from header to closing marker, capturing the exact document reference code, named transit states, ocean shipping corridor, destination region, and named logistics coordinator."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Run one final <code>Ctrl+A</code> / raw text check across the middle and bottom of the Module 04 PDF to verify whether any white-on-white text or hidden links remain. You will find <strong>zero</strong> additional hidden layers—confirming you have reached the <strong>final smoking-gun payload</strong> of the investigation."
+            }
+          ]
+        },
+        {
+          id: 6,
+          code: "STAGE 06 // INTELLIGENCE SYNTHESIS",
+          title: "Connecting the Complete Trafficking Pipeline",
+          summary: "Map the full chain from recruitment and Gulf transit anomalies to South American mining camps.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "Place your translated Module 04 cable beside <code>WOM/2419</code>. Notice how Module 04 bridges the exact operational gap left by the opening press release—and check the logistics signatory’s name against the Chair’s anime motif from Stage 02."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "Trace the three-part pipeline described in your translation: (1) victims recruited under fake free maternal/obstetric surgery campaigns (with interceptions noted in Southeast Asia) and moved under anomalous transit vouchers bearing UAE and Saudi Arabian medical institution names; (2) customs clearance signed by the logistics coordinator named after the elite military sniper from <em>Dr. STONE</em> (who leads an ocean expedition to South America in the anime!); and (3) transatlantic rerouting into closed camps near remote South American mining zones for forced debt bondage."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Extract the <strong>three specific customs loopholes</strong> used by that logistics signatory in Module 04: (i) <strong>freight exemptions</strong>, (ii) <strong>“medical supplies / personnel allocation” declarations</strong> (disguising trafficked women as obstetric kits or medical personnel), and (iii) <strong>inland transshipment permits</strong> whose actual port-to-inland routing records point straight to closed camps beside remote mineral extraction sites. Note also the closing paragraph’s caveat regarding multi-source relays and preliminary verification."
+            }
+          ]
+        },
+        {
+          id: 7,
+          code: "STAGE 07 // COMMITTEE EXECUTION",
+          title: "Weaponizing Module 04 in UNCSW Debate",
+          summary: "Convert your verified intelligence into unassailable speeches, caucus pressure, and operative clauses.",
+          hints: [
+            {
+              level: "Level A — Subtle Nudge (6s Cooldown)",
+              waitSec: 6,
+              cta: "Request Level A Nudge",
+              body: "Possessing the smoking gun will not win the gavel if you overstate what the document legally proves. Re-read the final paragraph of Module 04 before taking the floor so opponents cannot dismantle your credibility on a technicality."
+            },
+            {
+              level: "Level B — Exact Method / Where to Look (8s Cooldown)",
+              waitSec: 8,
+              cta: "Submit Formal Request for Clarification",
+              body: "Build your floor strategy around three moves: (1) <strong>Honor the Verification Caveat</strong>—cite the briefing’s multi-source maritime intelligence to demand an immediate UN-led forensic audit of transatlantic bills of lading rather than declaring final criminal guilt prematurely; (2) <strong>Target Key Blocs in Moderated Caucus</strong>—press the South American receiving state on port clearance and closed mining camp oversight, press Gulf transit states on forged hospital vouchers, and cite the Southeast Asian interception link to show global scope; and (3) <strong>Draft Binding Operative Clauses</strong>."
+            },
+            {
+              level: "Level C — Detailed Walkthrough Step (8s Cooldown)",
+              waitSec: 8,
+              cta: "Retrieve Deep Archive Protocol",
+              body: "Insert three surgical clauses into your Working Paper: (1) <strong>Cryptographic Humanitarian Verification</strong>—abolish unverified paper “medical supplies / personnel” customs exemptions in favor of WHO/UNODC cryptographic manifests; (2) <strong>Extraction-Zone Transshipment Audits</strong>—mandate joint customs-labor inspections for all inland transshipment permits terminating near mineral extraction zones; and (3) <strong>Targeted Signatory Sanctions</strong>—impose asset freezes, shipping blacklists, and travel bans on falsifying logistics signatories and shell freight entities."
+            }
+          ]
+        }
+      ];
+
+      /* ----------------------------------------------------------------------
+         Terminal DOM Wiring & Triggers
+         ---------------------------------------------------------------------- */
+      const argOverlay = document.getElementById("arg-overlay");
+      const argCloseBtn = document.getElementById("arg-close-btn");
+      const argPurgeBtn = document.getElementById("arg-purge-btn");
+      const argGateView = document.getElementById("arg-gate-view");
+      const argWalkthroughView = document.getElementById("arg-walkthrough-view");
+      const stagePillsHost = document.getElementById("stage-pills");
+      const stagePanelHost = document.getElementById("stage-panel-host");
+      const signalMonitorTag = document.getElementById("signal-monitor-tag");
+
+      const gateChecks = Array.from(document.querySelectorAll(".gate-check"));
+      const motionInput = document.getElementById("motion-input");
+      const holdVerifyBtn = document.getElementById("hold-verify-btn");
+      const holdProgressFill = document.getElementById("hold-progress-fill");
+      const gateErrorMsg = document.getElementById("gate-error-msg");
+      const routingBox = document.getElementById("routing-box");
+      const routingBar = document.getElementById("routing-bar");
+      const routingLog = document.getElementById("routing-log");
+
+      function openTerminal() {
+        if (!argOverlay) return;
+        argOverlay.classList.add("open");
+        if (signalMonitorTag) {
+          signalMonitorTag.textContent = "[SIGNAL MONITOR: ACTIVE]";
+          signalMonitorTag.style.color = "#22c55e";
+        }
+        renderTerminalView();
+      }
+
+      function closeTerminal() {
+        if (!argOverlay) return;
+        argOverlay.classList.remove("open");
+        if (signalMonitorTag) {
+          signalMonitorTag.textContent = "[SIGNAL MONITOR: STANDBY]";
+          signalMonitorTag.style.color = "";
+        }
+      }
+
+      if (argCloseBtn) {
+        argCloseBtn.addEventListener("click", closeTerminal);
+      }
+
+      if (argOverlay) {
+        argOverlay.addEventListener("click", (event) => {
+          if (event.target === argOverlay) closeTerminal();
+        });
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && argOverlay && argOverlay.classList.contains("open")) {
+          closeTerminal();
+        }
+      });
+
+      // Trigger 1: Typing "OBSERVE" anywhere outside an input/textarea
+      let keyBuffer = "";
+      document.addEventListener("keydown", (event) => {
+        const tag = event.target && event.target.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || event.metaKey || event.ctrlKey || event.altKey) {
+          return;
+        }
+        if (event.key && event.key.length === 1) {
+          keyBuffer = (keyBuffer + event.key.toUpperCase()).slice(-12);
+          if (keyBuffer.endsWith("OBSERVE")) {
+            keyBuffer = "";
+            openTerminal();
+          }
+        }
+      });
+
+      // Trigger 2: Tapping/clicking the Chair's quote 5 consecutive times
+      const chairTagline = document.getElementById("chair-tagline");
+      let taglineTapCount = 0;
+      let taglineTapTimer = null;
+
+      if (chairTagline) {
+        chairTagline.addEventListener("click", () => {
+          taglineTapCount += 1;
+          window.clearTimeout(taglineTapTimer);
+          taglineTapTimer = window.setTimeout(() => {
+            taglineTapCount = 0;
+          }, 2200);
+
+          if (taglineTapCount >= 5) {
+            taglineTapCount = 0;
+            openTerminal();
+          }
+        });
+      }
+
+      // Trigger 3: Tapping [SIGNAL MONITOR: STANDBY] 5 times as a discreet mobile fallback
+      let monitorTapCount = 0;
+      let monitorTapTimer = null;
+      if (signalMonitorTag) {
+        signalMonitorTag.addEventListener("click", () => {
+          monitorTapCount += 1;
+          window.clearTimeout(monitorTapTimer);
+          monitorTapTimer = window.setTimeout(() => {
+            monitorTapCount = 0;
+          }, 2200);
+          if (monitorTapCount >= 5) {
+            monitorTapCount = 0;
+            openTerminal();
+          }
+        });
+      }
+
+      // Purge cache button
+      if (argPurgeBtn) {
+        argPurgeBtn.addEventListener("click", () => {
+          localStorage.removeItem(STORAGE_KEY);
+          state = loadState();
+          gateChecks.forEach((cb) => {
+            cb.checked = false;
+          });
+          if (motionInput) motionInput.value = "";
+          if (gateErrorMsg) gateErrorMsg.textContent = "";
+          if (routingBox) routingBox.classList.remove("active");
+          if (routingBar) routingBar.style.width = "0%";
+          if (holdProgressFill) holdProgressFill.style.width = "0%";
+          if (holdVerifyBtn) {
+            holdVerifyBtn.disabled = false;
+            holdVerifyBtn.textContent = "Hold to Verify Diplomatic Credentials (0.0s / 4.0s)";
+          }
+          renderTerminalView();
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         Bureaucratic Gatekeeper Logic (4 Checkboxes + Motion + 4s Hold + 8s Route)
+         ---------------------------------------------------------------------- */
+      let holdInterval = null;
+      let holdStartMs = 0;
+      let routingInProgress = false;
+      const HOLD_REQUIRED_MS = 4000;
+
+      function validateGateInputs() {
+        const allChecked = gateChecks.every((cb) => cb.checked);
+        const motionNorm = String((motionInput && motionInput.value) || "")
+          .trim()
+          .toUpperCase()
+          .replace(/\s+/g, " ");
+
+        if (!allChecked) {
+          return "Procedural rejection: All four (4) Secretariat affirmations must be checked first.";
+        }
+        if (motionNorm !== "POINT OF INQUIRY") {
+          return "Procedural rejection: Enter the exact parliamentary motion phrase: POINT OF INQUIRY";
+        }
+        return "";
+      }
+
+      function cancelHold(reprimand) {
+        if (holdInterval) {
+          window.clearInterval(holdInterval);
+          holdInterval = null;
+        }
+        if (routingInProgress) return;
+        if (holdProgressFill) holdProgressFill.style.width = "0%";
+        if (holdVerifyBtn) {
+          holdVerifyBtn.textContent = "Hold to Verify Diplomatic Credentials (0.0s / 4.0s)";
+        }
+        if (reprimand && gateErrorMsg) {
+          gateErrorMsg.textContent = reprimand;
+        }
+      }
+
+      function startHold(event) {
+        if (event) event.preventDefault();
+        if (routingInProgress || state.cleared) return;
+
+        const err = validateGateInputs();
+        if (err) {
+          if (gateErrorMsg) gateErrorMsg.textContent = err;
+          return;
+        }
+
+        if (gateErrorMsg) gateErrorMsg.textContent = "";
+        holdStartMs = Date.now();
+
+        holdInterval = window.setInterval(() => {
+          const elapsed = Date.now() - holdStartMs;
+          const pct = Math.min(100, (elapsed / HOLD_REQUIRED_MS) * 100);
+          const secDisplay = Math.min(4.0, elapsed / 1000).toFixed(1);
+
+          if (holdProgressFill) holdProgressFill.style.width = `${pct}%`;
+          if (holdVerifyBtn) {
+            holdVerifyBtn.textContent = `Verifying Credentials... (${secDisplay}s / 4.0s)`;
+          }
+
+          if (elapsed >= HOLD_REQUIRED_MS) {
+            window.clearInterval(holdInterval);
+            holdInterval = null;
+            beginSlowRouting();
+          }
+        }, 50);
+      }
+
+      function beginSlowRouting() {
+        routingInProgress = true;
+        if (holdVerifyBtn) {
+          holdVerifyBtn.disabled = true;
+          holdVerifyBtn.textContent = "Credentials Verified — Routing Dispatch...";
+        }
+        if (routingBox) routingBox.classList.add("active");
+
+        const steps = [
+          "[01/04] Encrypting delegate inquiry packet...",
+          "[02/04] Routing via New Delhi Secretariat Desk (IST)...",
+          "[03/04] Cross-checking Roll Call & Quorum compliance...",
+          "[04/04] Clearance granted. Opening Field Guidance Dossier..."
+        ];
+
+        const totalDuration = 8000;
+        const start = Date.now();
+
+        const routeTimer = window.setInterval(() => {
+          const elapsed = Date.now() - start;
+          const pct = Math.min(100, (elapsed / totalDuration) * 100);
+          if (routingBar) routingBar.style.width = `${pct}%`;
+
+          const stepIndex = Math.min(steps.length - 1, Math.floor((elapsed / totalDuration) * steps.length));
+          if (routingLog) routingLog.textContent = steps[stepIndex];
+
+          if (elapsed >= totalDuration) {
+            window.clearInterval(routeTimer);
+            routingInProgress = false;
+            state.cleared = true;
+            saveState();
+            renderTerminalView();
+          }
+        }, 120);
+      }
+
+      if (holdVerifyBtn) {
+        holdVerifyBtn.addEventListener("mousedown", startHold);
+        holdVerifyBtn.addEventListener("touchstart", startHold, { passive: false });
+
+        ["mouseup", "mouseleave"].forEach((evt) => {
+          holdVerifyBtn.addEventListener(evt, () => {
+            if (holdInterval) {
+              cancelHold("Premature release detected. Diplomatic discipline requires holding for the full 4.0 seconds.");
+            }
+          });
+        });
+
+        ["touchend", "touchcancel"].forEach((evt) => {
+          holdVerifyBtn.addEventListener(evt, () => {
+            if (holdInterval) {
+              cancelHold("Premature release detected. Hold continuously for 4.0 seconds.");
+            }
+          });
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         Caesar Cipher Manual Stepper Helper (for Stage 04)
+         ---------------------------------------------------------------------- */
+      function shiftCaesarText(text, shift) {
+        const normalizedShift = ((shift % 26) + 26) % 26;
+        return String(text || "").replace(/[a-zA-Z]/g, (ch) => {
+          const base = ch >= "a" && ch <= "z" ? 97 : 65;
+          const code = ch.charCodeAt(0) - base;
+          return String.fromCharCode(((code + normalizedShift) % 26) + base);
+        });
+      }
+
+      /* ----------------------------------------------------------------------
+         Render 7-Stage Progressive Hint Ladder
+         ---------------------------------------------------------------------- */
+      let activeCooldownTimer = null;
+
+      function renderTerminalView() {
+        if (!argGateView || !argWalkthroughView) return;
+
+        if (!state.cleared) {
+          argGateView.style.display = "flex";
+          argWalkthroughView.style.display = "none";
+          return;
+        }
+
+        argGateView.style.display = "none";
+        argWalkthroughView.style.display = "flex";
+        renderStagePills();
+        renderActiveStagePanel();
+      }
+
+      function renderStagePills() {
+        if (!stagePillsHost) return;
+        stagePillsHost.innerHTML = "";
+
+        STAGES.forEach((stage) => {
+          const isUnlocked = stage.id <= state.maxStage;
+          const isActive = stage.id === state.activeStage;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `stage-pill ${isActive ? "active" : isUnlocked ? "unlocked" : "locked"}`;
+          btn.textContent = `${isUnlocked ? "0" + stage.id : "🔒 0" + stage.id}`;
+          btn.title = isUnlocked ? stage.title : `Locked — Complete Stage 0${stage.id - 1} first`;
+          btn.disabled = !isUnlocked;
+
+          if (isUnlocked) {
+            btn.addEventListener("click", () => {
+              if (activeCooldownTimer) {
+                window.clearInterval(activeCooldownTimer);
+                activeCooldownTimer = null;
+              }
+              state.activeStage = stage.id;
+              saveState();
+              renderStagePills();
+              renderActiveStagePanel();
+            });
+          }
+
+          stagePillsHost.appendChild(btn);
+        });
+      }
+
+      function renderActiveStagePanel() {
+        if (!stagePanelHost) return;
+        const stage = STAGES.find((s) => s.id === state.activeStage) || STAGES[0];
+        const unlockedSubLevel = state.subhints[stage.id] || 0;
+
+        const panel = document.createElement("div");
+        panel.className = "stage-panel";
+
+        // Stage Header
+        const header = document.createElement("div");
+        header.className = "stage-panel-header";
+        header.innerHTML = `
+          <p class="stage-panel-kicker">${stage.code}</p>
+          <h3 class="stage-panel-title">${stage.title}</h3>
+          <p class="stage-panel-desc">${stage.summary}</p>
+        `;
+        panel.appendChild(header);
+
+        // Render 3 Escalating Sub-Hints
+        stage.hints.forEach((hint, idx) => {
+          const levelNum = idx + 1; // 1, 2, 3
+          const isRevealed = unlockedSubLevel >= levelNum;
+          const isNextAvailable = unlockedSubLevel === levelNum - 1;
+
+          const card = document.createElement("div");
+          card.className = "subhint-card";
+
+          const top = document.createElement("div");
+          top.className = "subhint-top";
+          top.innerHTML = `<span class="subhint-badge">${hint.level}</span>`;
+          card.appendChild(top);
+
+          if (isRevealed) {
+            const body = document.createElement("div");
+            body.className = "subhint-body";
+            body.innerHTML = hint.body;
+            card.appendChild(body);
+
+            // Clunky Manual Caesar Shift Stepper inside Stage 04 Level C
+            if (hint.hasCaesarTool) {
+              const wb = document.createElement("div");
+              wb.className = "caesar-workbench";
+
+              const testCalibrated = ((state.caesarTestShift % 26) + 26) % 26 === 22; // -4 mod 26 = 22
+              const testOutput = shiftCaesarText("SRWIVZI", state.caesarTestShift);
+
+              wb.innerHTML = `
+                <div class="caesar-workbench-title">Secretariat Manual Caesar Shift Stepper (Clunky Calibration Mode)</div>
+                <p style="font-size:0.83rem;color:var(--text-secondary);">
+                  <strong>Step 1 — Calibrate Tool:</strong> Click <code>-1 Shift</code> four times on sample ciphertext <code>SRWIVZI</code> until it reads <code>OBSERVE</code>.
+                </p>
+                <div class="caesar-controls">
+                  <button type="button" id="caesar-test-minus" class="arg-mini-btn">-1 Shift</button>
+                  <button type="button" id="caesar-test-plus" class="arg-mini-btn">+1 Shift</button>
+                  <span style="font-family:monospace;font-size:0.8rem;color:var(--text-dim);">Net Shift: ${state.caesarTestShift}</span>
+                </div>
+                <div class="caesar-output-box">Sample Output: ${testOutput} ${testCalibrated ? "✓ [CALIBRATED]" : ""}</div>
+              `;
+
+              if (testCalibrated) {
+                const customWrap = document.createElement("div");
+                customWrap.style.cssText = "display:flex;flex-direction:column;gap:0.6rem;margin-top:0.4rem;padding-top:0.65rem;border-top:1px solid var(--border);";
+                const customOut = shiftCaesarText(state.caesarCustomInput, state.caesarCustomShift);
+                customWrap.innerHTML = `
+                  <p style="font-size:0.83rem;color:var(--text-secondary);">
+                    <strong>Step 2 — Decode Intercepted Transcript Phrase:</strong> Paste the encoded words from the broadcast below and step by 4 shifts.
+                  </p>
+                  <input id="caesar-custom-field" type="text" class="arg-input" value="${state.caesarCustomInput.replace(/"/g, "&quot;")}" placeholder="Paste encoded phrase from broadcast...">
+                  <div class="caesar-controls">
+                    <button type="button" id="caesar-custom-minus" class="arg-mini-btn">-1 Shift</button>
+                    <button type="button" id="caesar-custom-plus" class="arg-mini-btn">+1 Shift</button>
+                    <button type="button" id="caesar-custom-reset" class="arg-mini-btn">Reset (0)</button>
+                    <span style="font-family:monospace;font-size:0.8rem;color:var(--text-dim);">Applied Shift: ${state.caesarCustomShift}</span>
+                  </div>
+                  <div class="caesar-output-box">Shifted Output: ${customOut}</div>
+                `;
+                wb.appendChild(customWrap);
+              }
+
+              const sigint = document.createElement("details");
+              sigint.className = "sigint-details";
+              sigint.innerHTML = `
+                <summary>[SIGINT Last Resort — Technical Observers Only]</summary>
+                <p style="margin-top:0.45rem;">
+                  True to “Observe everything, EVERYTHING.”: client-side web forms often validate responses locally inside browser page data structures. Technically minded delegates who inspect page objects in DevTools Console can verify how the gatekeeper checks input—though decoding the Caesar cipher directly takes less than ten seconds.
+                </p>
+              `;
+              wb.appendChild(sigint);
+              card.appendChild(wb);
+            }
+          } else if (isNextAvailable) {
+            const actionBtn = document.createElement("button");
+            actionBtn.type = "button";
+            actionBtn.className = "subhint-action-btn";
+            actionBtn.textContent = `${hint.cta} (${hint.waitSec}s wait)`;
+
+            const cooldownNote = document.createElement("span");
+            cooldownNote.className = "cooldown-note";
+
+            actionBtn.addEventListener("click", () => {
+              if (activeCooldownTimer) return;
+              actionBtn.disabled = true;
+              let remaining = hint.waitSec;
+              cooldownNote.textContent = `Processing Secretariat clearance... ${remaining}s remaining`;
+
+              activeCooldownTimer = window.setInterval(() => {
+                remaining -= 1;
+                if (remaining > 0) {
+                  cooldownNote.textContent = `Processing Secretariat clearance... ${remaining}s remaining`;
+                } else {
+                  window.clearInterval(activeCooldownTimer);
+                  activeCooldownTimer = null;
+                  state.subhints[stage.id] = levelNum;
+                  saveState();
+                  renderActiveStagePanel();
+                }
+              }, 1000);
+            });
+
+            card.appendChild(actionBtn);
+            card.appendChild(cooldownNote);
+          } else {
+            const lockedNote = document.createElement("p");
+            lockedNote.style.cssText = "font-size:0.82rem;color:var(--text-dim);";
+            lockedNote.textContent = `Locked — Complete Level ${levelNum === 2 ? "A" : "B"} above first.`;
+            card.appendChild(lockedNote);
+          }
+
+          panel.appendChild(card);
+        });
+
+        // Stage Progression Footer (after all 3 sub-hints are reviewed)
+        if (unlockedSubLevel >= 3 && stage.id < STAGES.length) {
+          const nextStageId = stage.id + 1;
+
+          if (nextStageId === 5 && state.maxStage < 5) {
+            // Cryptographic Gate before unlocking Stage 05 (Module 04)
+            const cryptoBox = document.createElement("div");
+            cryptoBox.className = "crypto-gate-box";
+            cryptoBox.innerHTML = `
+              <p class="gate-step-label" style="color:var(--accent-live);">Stage 05 Cryptographic Verification Gate</p>
+              <p style="font-size:0.88rem;color:var(--text-secondary);">
+                To unlock Module 04 guidance (Stages 05–07), enter the decoded two-word Stage 04 passkey below. Verification runs locally via Web Crypto SHA-256.
+              </p>
+              <div class="crypto-gate-row">
+                <input id="stage5-pass-input" type="text" class="arg-input" placeholder="Enter decoded Stage 04 passkey..." autocomplete="off">
+                <button id="stage5-verify-btn" type="button" class="subhint-action-btn" style="background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary);">
+                  Verify &amp; Unlock Stage 05
+                </button>
+              </div>
+              <p id="stage5-gate-err" class="status-error"></p>
+              <button id="toggle-override-btn" type="button" class="override-toggle-link">
+                Already have Module 04 open? Use secondary briefing verification
+              </button>
+              <div id="stage5-override-box" class="override-box">
+                <p style="font-size:0.8rem;color:var(--text-secondary);">
+                  Enter either the Module 04 header reference code (<code>XXX-XXXXX-2026-XXX</code>) or the two-word anime title associated with its logistics signatory:
+                </p>
+                <div class="crypto-gate-row">
+                  <input id="stage5-override-input" type="text" class="arg-input" placeholder="Reference code or anime title..." autocomplete="off">
+                  <button id="stage5-override-btn" type="button" class="subhint-action-btn">
+                    Verify Override
+                  </button>
+                </div>
+              </div>
+            `;
+            panel.appendChild(cryptoBox);
+          } else {
+            const advanceBtn = document.createElement("button");
+            advanceBtn.type = "button";
+            advanceBtn.className = "btn btn-primary";
+            advanceBtn.style.alignSelf = "flex-start";
+            advanceBtn.textContent = `Acknowledge & Proceed to Stage 0${nextStageId}`;
+            advanceBtn.addEventListener("click", () => {
+              if (state.maxStage < nextStageId) {
+                state.maxStage = nextStageId;
+              }
+              state.activeStage = nextStageId;
+              saveState();
+              renderStagePills();
+              renderActiveStagePanel();
+            });
+            panel.appendChild(advanceBtn);
+          }
+        }
+
+        stagePanelHost.innerHTML = "";
+        stagePanelHost.appendChild(panel);
+
+        // Bind interactive controls inside the newly rendered panel
+        const testMinus = document.getElementById("caesar-test-minus");
+        const testPlus = document.getElementById("caesar-test-plus");
+        if (testMinus) {
+          testMinus.addEventListener("click", () => {
+            state.caesarTestShift -= 1;
+            saveState();
+            renderActiveStagePanel();
+          });
+        }
+        if (testPlus) {
+          testPlus.addEventListener("click", () => {
+            state.caesarTestShift += 1;
+            saveState();
+            renderActiveStagePanel();
+          });
+        }
+
+        const customField = document.getElementById("caesar-custom-field");
+        const customMinus = document.getElementById("caesar-custom-minus");
+        const customPlus = document.getElementById("caesar-custom-plus");
+        const customReset = document.getElementById("caesar-custom-reset");
+
+        if (customField) {
+          customField.addEventListener("input", (e) => {
+            state.caesarCustomInput = e.target.value;
+            saveState();
+            const outBoxes = panel.querySelectorAll(".caesar-output-box");
+            if (outBoxes[1]) {
+              outBoxes[1].textContent = `Shifted Output: ${shiftCaesarText(state.caesarCustomInput, state.caesarCustomShift)}`;
+            }
+          });
+        }
+        if (customMinus) {
+          customMinus.addEventListener("click", () => {
+            state.caesarCustomShift -= 1;
+            saveState();
+            renderActiveStagePanel();
+          });
+        }
+        if (customPlus) {
+          customPlus.addEventListener("click", () => {
+            state.caesarCustomShift += 1;
+            saveState();
+            renderActiveStagePanel();
+          });
+        }
+        if (customReset) {
+          customReset.addEventListener("click", () => {
+            state.caesarCustomShift = 0;
+            saveState();
+            renderActiveStagePanel();
+          });
+        }
+
+        // Bind Stage 05 Cryptographic Gate controls
+        const s5Input = document.getElementById("stage5-pass-input");
+        const s5Btn = document.getElementById("stage5-verify-btn");
+        const s5Err = document.getElementById("stage5-gate-err");
+        const toggleOverrideBtn = document.getElementById("toggle-override-btn");
+        const overrideBox = document.getElementById("stage5-override-box");
+        const overrideInput = document.getElementById("stage5-override-input");
+        const overrideBtn = document.getElementById("stage5-override-btn");
+
+        if (toggleOverrideBtn && overrideBox) {
+          toggleOverrideBtn.addEventListener("click", () => {
+            overrideBox.classList.toggle("visible");
+          });
+        }
+
+        if (s5Btn && s5Input) {
+          s5Btn.addEventListener("click", async () => {
+            const ok = await verifyNormalizedSecret(s5Input.value, "primary");
+            if (ok) {
+              state.maxStage = 5;
+              state.activeStage = 5;
+              saveState();
+              renderStagePills();
+              renderActiveStagePanel();
+            } else if (s5Err) {
+              s5Err.textContent = "Cryptographic mismatch: That is not the decoded Stage 04 passkey. Avoid guessing blindly.";
+            }
+          });
+        }
+
+        if (overrideBtn && overrideInput) {
+          overrideBtn.addEventListener("click", async () => {
+            const ok = await verifyNormalizedSecret(overrideInput.value, "override");
+            if (ok) {
+              state.maxStage = 5;
+              state.activeStage = 5;
+              saveState();
+              renderStagePills();
+              renderActiveStagePanel();
+            } else if (s5Err) {
+              s5Err.textContent = "Override verification failed: Check the Module 04 header code or its logistics signatory’s anime series.";
+            }
+          });
+        }
       }
     });
   </script>
